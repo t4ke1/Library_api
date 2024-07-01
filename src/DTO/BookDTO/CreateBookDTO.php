@@ -5,7 +5,7 @@ namespace App\DTO\BookDTO;
 use App\DTO\DtoResolvedInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class AddBookDTO implements DtoResolvedInterface
+class CreateBookDTO implements DtoResolvedInterface
 {
     #[Assert\NotBlank]
     #[Assert\Type('string')]

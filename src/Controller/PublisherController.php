@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\DTO\AuthorDTO\AddAuthorDTO;
-use App\DTO\PublisherDTO\AddPublisherDTO;
+use App\DTO\PublisherDTO\CreatePublisherDTO;
 use App\DTO\PublisherDTO\UpdatePublisherDTO;
+use App\Exception\BadRequestException;
 use App\Exception\NotFoundException;
 use App\Services\PublisherService;
 use Nelmio\ApiDocBundle\Annotation\Model;
@@ -21,17 +21,17 @@ class PublisherController extends AbstractController
     ) {
     }
 
-    #[Route('/api/add-publisher', name: 'add_publisher', methods: ['POST'])]
+    #[Route('/api/create-publisher', name: 'create_publisher', methods: ['POST'])]
     #[OA\RequestBody(
-        description: 'Add publisher',
+        description: 'create publisher',
         content: new OA\JsonContent(
             type: 'array',
-            items: new OA\Items(ref: new Model(type: AddPublisherDTO::class))
+            items: new OA\Items(ref: new Model(type: CreatePublisherDTO::class))
         )
     )]
     #[OA\Response(
         response: 200,
-        description: 'Success => publisher added'
+        description: 'Success => publisher has been created'
     )]
     #[OA\Response(
         response: 409,
@@ -41,17 +41,15 @@ class PublisherController extends AbstractController
         name: 'add_publisher',
         description: 'responses',
         in: 'query',
-        schema: new OA\Schema(type: AddPublisherDTO::class),
+        schema: new OA\Schema(type: CreatePublisherDTO::class),
         content: new OA\JsonContent(
             type: 'array',
-            items: new OA\Items(ref: new Model(type: AddPublisherDTO::class))
+            items: new OA\Items(ref: new Model(type: CreatePublisherDTO::class))
         )
     )]
-    public function addPublisher(AddPublisherDTO $DTO): JsonResponse
+    public function createPublisher(CreatePublisherDTO $DTO): JsonResponse
     {
-        $name = $DTO->getName();
-        $address = $DTO->getAddress();
-        $this->publisherService->addPublisher($name, $address);
+        $this->publisherService->createPublisher($DTO);
         return new JsonResponse(['success' => "publisher added"], 200);
     }
 
@@ -84,6 +82,7 @@ class PublisherController extends AbstractController
 
     /**
      * @throws NotFoundException
+     * @throws BadRequestException
      */
     #[Route('/api/update-publisher', name: 'update_publisher', methods: ['PUT'])]
     #[OA\RequestBody(
@@ -95,11 +94,15 @@ class PublisherController extends AbstractController
     )]
     #[OA\Response(
         response: 200,
-        description: 'Success => publisher updated'
+        description: 'Success => publisher has been updated'
     )]
     #[OA\Response(
-        response: 409,
+        response: 400,
         description: 'Data is not valid'
+    )]
+    #[OA\Response(
+        response: 400,
+        description: 'Bad Request'
     )]
     #[OA\Response(
         response: 404,
@@ -117,10 +120,7 @@ class PublisherController extends AbstractController
     )]
     public function updatePublisher(UpdatePublisherDTO $DTO): JsonResponse
     {
-        $id = $DTO->getId();
-        $name = $DTO->getName();
-        $address = $DTO->getAddress();
-        $this->publisherService->updatePublisher($id, $name, $address);
-        return new JsonResponse(['success' => "publisher updated"], 200);
+        $this->publisherService->updatePublisher($DTO);
+        return new JsonResponse(['success' => "publisher has been updated"], 200);
     }
 }

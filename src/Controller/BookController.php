@@ -2,12 +2,10 @@
 
 namespace App\Controller;
 
-use App\DTO\AuthorDTO\AddAuthorDTO;
-use App\DTO\BookDTO\AddBookDTO;
+use App\DTO\BookDTO\CreateBookDTO;
 use App\Exception\NotFoundException;
 use App\Services\BookService;
 use OpenApi\Attributes as OA;
-use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,9 +18,12 @@ class BookController extends AbstractController
     ) {
     }
 
-    #[Route('/api/add-book', name: 'add_book', methods: ['POST'])]
+    /**
+     * @throws NotFoundException
+     */
+    #[Route('/api/create-book', name: 'create_book', methods: ['POST'])]
     #[OA\RequestBody(
-        description: 'Add book',
+        description: 'create book',
         content: new OA\JsonContent(
             type: 'array',
             items: new OA\Items(
@@ -42,21 +43,16 @@ class BookController extends AbstractController
     )]
     #[OA\Response(
         response: 200,
-        description: 'Success => author added'
+        description: 'Success => book has been created'
     )]
     #[OA\Response(
-        response: 409,
+        response: 400,
         description: 'Data is not valid'
     )]
-    public function addBook(AddBookDTO $DTO): JsonResponse
+    public function createBook(CreateBookDTO $DTO): JsonResponse
     {
-        $title = $DTO->getTitle();
-        $publishDate = $DTO->getPublishDate();
-        $authorId = $DTO->getAuthorId();
-        $publisherId = $DTO->getPublisherId();
-
-        $this->bookService->addBook($title, $publishDate, $authorId, $publisherId);
-        return new JsonResponse(['success' => "book added"], 200);
+        $this->bookService->createBook($DTO);
+        return new JsonResponse(['success' => "book has been created"], 200);
     }
 
     /**
@@ -83,10 +79,10 @@ class BookController extends AbstractController
         $this->bookService->deleteBook($id);
         return new JsonResponse(['success' => "book deleted"], 200);
     }
-    #[Route('/api/get-all-books', methods: ['GET'])]
+    #[Route('/api/book/list', methods: ['GET'])]
     public function getAllBooks(): JsonResponse
     {
-        $book = $this->bookService->getAllBooks();
+        $book = $this->bookService->getBookList();
         return new JsonResponse(['success' => $book], 200);
     }
 }

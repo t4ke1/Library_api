@@ -20,7 +20,7 @@ ___
 ___
 [api/doc](http://localhost/api/doc)
 ___
-    1.Создать автора /api/add-authors['post'] 
+    1.Создать автора /api/create-authors['post'] 
     {
         "firstName":"string",
         "lastName":"string"
@@ -34,18 +34,18 @@ ___
         "publisherId":int
     }  
     4.Удалить книгу /api/delete-book/{id} ['delete'] /api/delete-book/(int)$id
-    5.Получить список всех книг, фамилию автора и наименование издательства['get'] /api/get-all-books
-    6.Добавить издателя /api/add-publisher ['post'] /api/add-publisher
+    5.Получить список всех книг, фамилию автора и наименование издательства['get'] /api/book/list
+    6.Добавить издателя /api/create-publisher ['post'] /api/add-publisher
     {
         "name":"string",
         "address":"string"
     }
     7.Удалить издатея /api/delete-publisher/{id} ['delete'] /api/delete-publisher/(int)$id
-    8.Обновить издателя /update-publisher ['put']
+    8.Обновить издателя /api/update-publisher ['put']
     {
         "id":int,
-        "name":"string",
-        "address":"string"
+        "name":"?string",
+        "address":"?string"
     }
 ___
 ## Установка

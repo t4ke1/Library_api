@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\DTO\AuthorDTO\AddAuthorDTO;
+use App\DTO\AuthorDTO\CreateAuthorDTO;
 use OpenApi\Attributes as OA;
 use App\Exception\NotFoundException;
 use App\Services\AuthorService;
@@ -18,39 +18,37 @@ class AuthorController extends AbstractController
         private readonly AuthorService $authorService
     ) {
     }
-    #[Route('/api/add-authors', name: 'add_author', methods: ['POST'])]
+    #[Route('/api/create-authors', name: 'create_author', methods: ['POST'])]
     #[OA\RequestBody(
         description: 'Create author',
         content: new OA\JsonContent(
             type: 'array',
-            items: new OA\Items(ref: new Model(type: AddAuthorDTO::class))
+            items: new OA\Items(ref: new Model(type: CreateAuthorDTO::class))
         )
     )]
     #[OA\Response(
         response: 200,
-        description: 'Success => author added'
+        description: 'Success => author has been created'
     )]
     #[OA\Response(
-        response: 409,
+        response: 400,
         description: 'Data is not valid'
     )]
     #[OA\Parameter(
         name: 'add_author',
         description: 'responses',
         in: 'query',
-        schema: new OA\Schema(type: AddAuthorDTO::class),
+        schema: new OA\Schema(type: CreateAuthorDTO::class),
         content: new OA\JsonContent(
             type: 'array',
-            items: new OA\Items(ref: new Model(type: AddAuthorDTO::class))
+            items: new OA\Items(ref: new Model(type: CreateAuthorDTO::class))
         )
     )]
-    public function addAuthor(AddAuthorDTO $DTO): JsonResponse
+    public function createAuthor(CreateAuthorDTO $DTO): JsonResponse
     {
-        $firstname = $DTO->getFirstName();
-        $lastname = $DTO->getLastName();
 
-        $this->authorService->addAuthor($firstname, $lastname);
-        return new JsonResponse(['success' => "author added"], 200);
+        $this->authorService->createAuthor($DTO);
+        return new JsonResponse(['success' => "author has been created"], 200);
     }
 
     /**

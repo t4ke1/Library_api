@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\DTO\AuthorDTO\CreateAuthorDTO;
 use App\Entity\Author;
 use App\Exception\NotFoundException;
 use Doctrine\ORM\EntityManagerInterface;
@@ -12,11 +13,11 @@ class AuthorService
         private EntityManagerInterface $entityManager
     ) {
     }
-    public function addAuthor(string $firstName, string $lastName): Author
+    public function createAuthor(CreateAuthorDTO $DTO): Author
     {
         $author = new Author();
-        $author->setFirstName($firstName);
-        $author->setLastName($lastName);
+        $author->setFirstName($DTO->getFirstName());
+        $author->setLastName($DTO->getLastName());
         $this->entityManager->persist($author);
         $this->entityManager->flush();
         return $author;

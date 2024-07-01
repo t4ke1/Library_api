@@ -10,12 +10,12 @@ class UpdatePublisherDTO implements DtoResolvedInterface
     #[Assert\NotBlank]
     #[Assert\Type('integer')]
     private int $id;
-    #[Assert\NotBlank]
+
     #[Assert\Type('string')]
-    private string $name;
-    #[Assert\NotBlank]
+    private ?string $name;
+
     #[Assert\Type('string')]
-    private string $address;
+    private ?string $address;
 
     public function getId(): string
     {
@@ -26,23 +26,23 @@ class UpdatePublisherDTO implements DtoResolvedInterface
         $this->id = $id;
         return $this;
     }
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
-    public function setName(string $name): self
+    public function setName(?string $name): self
     {
         $this->name = $name;
         return $this;
 
     }
 
-    public function getAddress(): string
+    public function getAddress(): ?string
     {
         return $this->address;
     }
 
-    public function setAddress(string $address): self
+    public function setAddress(?string $address): self
     {
         $this->address = $address;
         return $this;

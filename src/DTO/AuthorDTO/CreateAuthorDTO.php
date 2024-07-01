@@ -5,7 +5,7 @@ namespace App\DTO\AuthorDTO;
 use App\DTO\DtoResolvedInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class AddAuthorDTO implements DtoResolvedInterface
+class CreateAuthorDTO implements DtoResolvedInterface
 {
     #[Assert\NotBlank]
     #[Assert\Type('string')]

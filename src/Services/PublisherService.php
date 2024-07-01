@@ -2,24 +2,27 @@
 
 namespace App\Services;
 
+use App\DTO\PublisherDTO\CreatePublisherDTO;
+use App\DTO\PublisherDTO\UpdatePublisherDTO;
 use App\Entity\Book;
 use App\Entity\Publisher;
+use App\Exception\BadRequestException;
 use App\Exception\NotFoundException;
 use Doctrine\ORM\EntityManagerInterface;
 
 class PublisherService
 {
     public function __construct(
-        private EntityManagerInterface $entityManager
+        private readonly EntityManagerInterface $entityManager
     ) {
     }
 
-    public function addPublisher(string $name, string $address): Publisher
+    public function createPublisher(createPublisherDTO $DTO): Publisher
     {
         $publisher = new Publisher();
         $publisher
-            ->setName($name)
-            ->setAddress($address);
+            ->setName($DTO->getName())
+            ->setAddress($DTO->getAddress());
         $this->entityManager->persist($publisher);
         $this->entityManager->flush();
         return $publisher;
@@ -41,15 +44,26 @@ class PublisherService
         $this->entityManager->flush();
     }
 
-    public function updatePublisher(string $id, string $name, string $address): Publisher
+    /**
+     * @throws BadRequestException
+     * @throws NotFoundException
+     */
+    public function updatePublisher(UpdatePublisherDTO $DTO): Publisher
     {
-        $publisher = $this->entityManager->getRepository(Publisher::class)->findOneBy(['id' => $id]);
+        $publisher = $this->entityManager->getRepository(Publisher::class)->findOneBy(['id' => $DTO->getId()]);
         if ($publisher === null) {
             throw new NotFoundException();
         }
-        $publisher
-            ->setName($name)
-            ->setAddress($address);
+        if ($DTO->getName() !== null) {
+            $publisher->setName($DTO->getName());
+        }
+        if ($DTO->getAddress() !== null) {
+            $publisher->setAddress($DTO->getAddress());
+        }
+        if (($DTO->getAddress() === null) && ($DTO->getName() === null)) {
+            throw new BadRequestException();
+        }
+
         $this->entityManager->persist($publisher);
         $this->entityManager->flush();
         return $publisher;
