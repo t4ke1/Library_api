@@ -19,8 +19,7 @@ class DeleteAuthorCommand extends Command
 {
     public function __construct(
         private AuthorService $authorService
-    )
-    {
+    ) {
         parent::__construct();
     }
 

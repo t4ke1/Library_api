@@ -21,7 +21,7 @@ class PublisherController extends AbstractController
     ) {
     }
 
-    #[Route('/api/add-publisher',name: 'add_publisher', methods: ['POST'])]
+    #[Route('/api/add-publisher', name: 'add_publisher', methods: ['POST'])]
     #[OA\RequestBody(
         description: 'Add publisher',
         content: new OA\JsonContent(

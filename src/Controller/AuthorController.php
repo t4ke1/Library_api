@@ -56,7 +56,7 @@ class AuthorController extends AbstractController
     /**
      * @throws NotFoundException
      */
-    #[Route('/api/delete-author/{id}',name: 'delete_author', methods: ['DELETE'])]
+    #[Route('/api/delete-author/{id}', name: 'delete_author', methods: ['DELETE'])]
     #[OA\Response(
         response: 200,
         description: 'Success => author deleted'

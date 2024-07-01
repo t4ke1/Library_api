@@ -21,3 +21,5 @@ migrations:
 
 AuthorClear:
 	    docker compose exec php bash -c "php bin/console DeleteAuthor"
+cs-fix:
+	 docker compose exec php bash -c "tools/php-cs-fixer/vendor/bin/php-cs-fixer fix src"

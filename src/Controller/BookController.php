@@ -20,7 +20,7 @@ class BookController extends AbstractController
     ) {
     }
 
-    #[Route('/api/add-book',name: 'add_book', methods: ['POST'])]
+    #[Route('/api/add-book', name: 'add_book', methods: ['POST'])]
     #[OA\RequestBody(
         description: 'Add book',
         content: new OA\JsonContent(
@@ -29,9 +29,12 @@ class BookController extends AbstractController
                 properties: [
                     new OA\Property(property: 'title', type: 'string'),
                     new OA\Property(property: 'publishDate', type: 'string', format: 'yyyy.mm.dd', example: '2020.01.01'),
-                    new OA\Property(property: 'authorId', type: 'array',
-                        items: new OA\Items(type: 'integer',example: [1,2,3])),
-                    new OA\Property(property: 'publisherId', type: 'integer',example: 1),
+                    new OA\Property(
+                        property: 'authorId',
+                        type: 'array',
+                        items: new OA\Items(type: 'integer', example: [1,2,3])
+                    ),
+                    new OA\Property(property: 'publisherId', type: 'integer', example: 1),
                 ],
                 type: 'object'
             )
@@ -83,7 +86,7 @@ class BookController extends AbstractController
     #[Route('/api/get-all-books', methods: ['GET'])]
     public function getAllBooks(): JsonResponse
     {
-       $book = $this->bookService->getAllBooks();
+        $book = $this->bookService->getAllBooks();
         return new JsonResponse(['success' => $book], 200);
     }
 }
